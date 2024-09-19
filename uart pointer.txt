@@ -1,0 +1,23 @@
+#include <xc.h>
+
+void trans(char *a);
+
+void main(void) {
+    char a[6] = "anuja";  // Array size increased to 6 to include the null terminator '\0'
+    TRISC = 0x00;
+    TXSTA = 0x24;
+    RCSTA = 0x90;
+    SPBRG = 129;
+    
+    for(int i = 0; i < 5; i++) {
+        trans(&a[i]); // Pass the address of the character
+    }
+    
+    while(1);
+}
+
+void trans(char *a) {
+    TXREG = *a;  // Dereference the pointer to get the character
+    while(TXIF == 0);  // Wait until the transmission is complete
+    TXIF = 0;  // Clear the flag
+}

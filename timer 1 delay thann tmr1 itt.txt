@@ -1,0 +1,25 @@
+#include <xc.h>
+void delay(void);
+void main(void) {
+
+    TRISC=0X00;
+    T1CON=0X31;//TIMER CONFIGURE
+    TMR1=3036;  
+     while(1)
+    {
+            PORTC=0XFF;
+            delay();
+            PORTC=0X00;
+            delay();
+    }
+    return;
+}
+void delay(void)
+{
+   
+    while(TMR1IF==0);//FLAG 1 AANONN CHECK CHEYYAAN(OVERFLOW AAYONNN ARYAAN)
+    TMR1IF=0;//1 AAYAL 0 AAKAAN
+    TMR1=3036;//INITIAL TIMER VALUE ITH VARY CHEYYAAM DELAY KURAYKKUNNA ANSARICH
+ 
+}
+  

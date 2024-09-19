@@ -1,0 +1,76 @@
+#include <xc.h>
+#include<stdio.h>//sprintf kodukkunnond
+void cmd(unsigned char a );
+void data(unsigned char a );
+void display(const char *p);
+void main(void) {
+    TRISC=TRISD=0X00;
+    TRISA=0XFF;
+    cmd(0x01);
+    cmd(0x0f);
+    cmd(0X38);
+    cmd(0x0c);
+   // display("      ADC");
+   // while(1);
+   //ADCON0=0X01;
+   ADCON1=0X00;
+   ADCON2=0X86;
+    while(1)
+   {
+        ADCON0=0X01;
+        for(unsigned int i=0;i<=10000;i++);
+        int adc;
+        char conv[15];
+        GO=1;
+        while (ADIF==0);
+         ADIF=0;
+        adc=ADRES;
+        sprintf(conv,"ADC value %4d",adc);//4bit aayond %4d 1023 [(2^10)-1]//stringilekk maattaan
+        cmd(0x80);
+        display(conv);
+        ADCON0=0X05;
+         for(unsigned int i=0;i<=10000;i++);
+         int adc1;
+        char conv1[15];
+        GO=1;
+        while (ADIF==0);
+         ADIF=0;
+        adc1=ADRES;
+        sprintf(conv1,"ADC1 value %4d",adc1);//4bit aayond %4d 1023 [(2^10)-1]//stringilekk maattaan
+        cmd(0xc0);
+        display(conv1);
+         
+    }
+    return;
+}
+void cmd(unsigned char a )
+{
+    RC0=0;
+    //RC1=0;GRND
+    PORTD=a;
+    RC2=1;
+    for(int i=0;i<=100;i++);
+    RC2=0;
+    for(int i=0;i<=5000;i++);
+}
+void data(unsigned char a )
+{
+    RC0=1;
+    //RC1=0;GRND
+    PORTD=a;
+    RC2=1;
+    for(int i=0;i<=100;i++);
+    RC2=0;
+    for(int i=0;i<=5000;i++);
+}
+
+void display(const char *p)
+{
+    while(*p)
+    {
+        data(*p);
+        p++;
+    }
+}
+
+ 

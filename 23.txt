@@ -1,0 +1,15 @@
+INTRODUCTION PROGRAM(SIMPLE)
+
+#include <xc.h>
+
+void main(void)
+{
+    TRISC=0X00;
+
+while(1)
+{
+    PORTC=0XFF;
+    PORTC=0X00;
+}
+return;
+}

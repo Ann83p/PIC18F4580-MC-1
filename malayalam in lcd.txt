@@ -1,0 +1,117 @@
+#include <xc.h>
+
+// Function Prototypes
+void cmd(unsigned char a);
+void data(unsigned char a);
+void display(const char *p);
+void createCustomChar(unsigned char location, unsigned char *pattern);
+
+// Custom character patterns for "അ" and "മ"
+unsigned char char_a1[8] = {0x1F,
+  0x17,
+  0x15,
+  0x17,
+  0x15,
+  0x15,
+  0x17,
+  0x00};
+unsigned char char_a2[8] = {0x17,
+  0x09,
+  0x09,
+  0x0B,
+  0x0D,
+  0x0D,
+  0x0B,
+  0x00};// "അ"
+unsigned char char_n[8] = { 0x0E,
+  0x15,
+  0x15,
+  0x15,
+  0x15,
+  0x15,
+  0x15,
+  0x00};     // "മ" Part 1
+unsigned char char_u[8] = {0x0C,
+  0x04,
+  0x04,
+  0x04,
+  0x0A,
+  0x11,
+  0x0E,
+  0x00};     // "മ" Part 2
+unsigned char char_ja1[8] = { 0x1F,
+  0x15,
+  0x15,
+  0x1F,
+  0x10,
+  0x11,
+  0x0E,
+  0x00};
+unsigned char char_ja2[8] = { 0x0E,
+  0x11,
+  0x01,
+  0x1F,
+  0x07,
+  0x19,
+  0x07,
+  0x00};
+
+void main(void) {
+    TRISC = TRISD = 0x00; // Set PORTC and PORTD as output
+    cmd(0x01);  // Clear display
+    cmd(0x0F);  // Display ON, cursor ON, blink cursor ON
+    
+    createCustomChar(0, char_a1);  // Create custom character for "അ"
+    createCustomChar(1, char_a2);
+    createCustomChar(2, char_n);    // Create custom character for "മ" Part 1
+    createCustomChar(3, char_u);    // Create custom character for "മ" Part 2
+    createCustomChar(4, char_ja1);
+    createCustomChar(5, char_ja2);
+    
+    cmd(0x80);  // Move to the first line
+    
+    data(0x00); // Display "അ"
+    data(0x01); // Display "മ" Part 1
+    data(0x02); // Display "മ" Part 2
+    data(0x03);
+    data(0x04);
+    data(0x05);
+    while(1); // Infinite loop to keep the display on
+    return;
+}
+
+void cmd(unsigned char a) {
+    RC0 = 0; // RS = 0 for command
+    RC1 = 0; // RW = 0 for write
+    PORTD = a; // Send command
+    RC2 = 1; // Enable pulse
+    for(int i = 0; i <= 100; i++); // Small delay
+    RC2 = 0;
+    for(int i = 0; i <= 5000; i++); // Larger delay
+}
+
+void data(unsigned char a) {
+    RC0 = 1; // RS = 1 for data
+    RC1 = 0; // RW = 0 for write
+    PORTD = a; // Send data
+    RC2 = 1; // Enable pulse
+    for(int i = 0; i <= 100; i++); // Small delay
+    RC2 = 0;
+    for(int i = 0; i <= 5000; i++); // Larger delay
+}
+
+void display(const char *p) {
+    while(*p) {
+        data(*p); // Display each character
+        p++;
+    }
+}
+
+void createCustomChar(unsigned char location, unsigned char *pattern) {
+    if (location < 8) { // Only 8 custom characters are allowed in CGRAM
+        cmd(0x40 + (location * 8)); // Set CGRAM address
+        for(int i = 0; i < 8; i++) {
+            data(pattern[i]); // Write each row of the custom character to CGRAM
+        }
+    }
+}

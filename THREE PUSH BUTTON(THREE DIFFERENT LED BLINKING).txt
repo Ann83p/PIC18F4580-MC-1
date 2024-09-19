@@ -1,0 +1,48 @@
+
+THREE PUSH BUTTON(THREE DIFFERENT LED BLINKING)
+
+#include <xc.h>
+
+void main(void) {
+    TRISC=0XFF;
+    TRISD=0X00;
+    while(1)
+    {
+        if(RC0==1)
+        {
+            PORTD=0XFF;
+            for(unsigned int i=0;i<65000;i++);
+            PORTD=0X00;
+            for(unsigned int i=0;i<65000;i++);
+        }
+        else
+        {
+            PORTD=0X00;
+        }
+        if(RC2==1)
+        {
+            for(int j=1;j<=128;j=j*2)
+            {
+                PORTD=j;
+                for(unsigned int i=0;i<65000;i++);
+            }
+        }
+            else
+            {
+                PORTD=0X00;
+            }
+    if(RC4==1)
+        {
+            for(int j=128;j>=1;j=j/2)
+            {
+                PORTD=j;
+                for(unsigned int i=0;i<65000;i++);
+            }
+    }
+            else
+            {
+                PORTD=0X00;
+            }
+    }
+    return;
+}

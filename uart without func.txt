@@ -1,0 +1,12 @@
+#include <xc.h>
+void trans(void);
+void main(void) {
+    TRISC=0X00;
+    TXSTA=0X24;
+    RCSTA=0X90;
+    SPBRG=129;
+    TXREG=('A');
+    while(TXIF==0);//1 aayaal exit aakum false condition(0 aayaal program loopil)
+    TXIF=0;//flag clear
+return;
+}

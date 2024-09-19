@@ -1,0 +1,61 @@
+#include <xc.h>
+void delay();
+ unsigned char a[]={0X3F,0X06,0X5B,0X4F,0X66,0X6D,0X7D,0X07,0X7F,0X6F};
+  int i,j,k,l;
+void main(void) {
+    TRISC=0X00;
+    TRISD=0X10;
+   
+    while(1){
+                PORTD=0x0e;
+                PORTC=a[i];
+                delay();
+                PORTD=0x0d;
+                PORTC=a[j];
+                delay();
+                PORTD=0x0b;
+                PORTC=a[k];
+                delay();
+                PORTD=0x07;
+                PORTC=a[l];
+                delay();
+
+        if (RD4==1)
+        {
+            l++;
+            if(l==10)
+            {
+                l=0;
+                k++;
+            if(k==10)
+            {
+                k=0;
+                 j++;
+            if(j==10)
+            {
+                j=0;
+                i++;
+                 if(i==10)
+                 {
+                     i=0;
+                 }}}}} 
+            while(RD4==1)//additional count cheyyaathe irikkaan button njekkia maathrm increment
+            {
+                 PORTD=0x0e;
+                PORTC=a[i];
+                delay();
+                PORTD=0x0d;
+                PORTC=a[j];
+                delay();
+                PORTD=0x0b;
+                PORTC=a[k];
+                delay();
+                PORTD=0x07;
+                PORTC=a[l];
+                delay();
+            }}}
+       
+        void delay()
+        {
+            for(unsigned int i=0;i<=100;i++);
+        }

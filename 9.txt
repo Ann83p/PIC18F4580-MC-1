@@ -1,0 +1,30 @@
+#include <xc.h>
+
+void main(void) {
+    TRISC=0X00;
+    while(1)
+    {
+        PORTC=0X3F;
+        for(long int i=0;i<80000;i++);
+        PORTC=0X06;
+        for(long int i=0;i<80000;i++);
+        PORTC=0X5B;
+        for(long int i=0;i<80000;i++);
+        PORTC=0X4F;
+        for(long int i=0;i<80000;i++);
+        PORTC=0X66;
+        for(long int i=0;i<80000;i++);
+        PORTC=0X6D;
+       for(long int i=0;i<80000;i++);
+         PORTC=0X7D;
+       for(long int i=0;i<80000;i++);
+         PORTC=0X07;
+      for(long int i=0;i<80000;i++);
+         PORTC=0X7F;
+       for(long int i=0;i<80000;i++);
+         PORTC=0X6F;
+      for(long int i=0;i<80000;i++);
+
+    }
+    return;
+}

@@ -1,0 +1,70 @@
+#include <xc.h>
+
+// Function Prototypes
+void cmd(unsigned char a);
+void data(unsigned char a);
+void display(const char *p);
+void createCustomChar(unsigned char location, unsigned char *pattern);
+
+// Custom character patterns for H, E, L, O
+unsigned char H[8] = {0x11, 0x11, 0x1F, 0x11, 0x11, 0x00, 0x00, 0x00};
+unsigned char E[8] = {0x1F, 0x10, 0x1F, 0x10, 0x1F, 0x00, 0x00, 0x00};
+unsigned char L[8] = {0x10, 0x10, 0x10, 0x10, 0x1F, 0x00, 0x00, 0x00};
+unsigned char O[8] = {0x0E, 0x11, 0x11, 0x11, 0x0E, 0x00, 0x00, 0x00};
+
+void main(void) {
+    TRISC = TRISD = 0x00; // Set PORTC and PORTD as output
+    cmd(0x01);  // Clear display
+    cmd(0x0F);  // Display ON, cursor ON, blink cursor ON
+    
+    createCustomChar(0, H);  // Create custom character H at location 0
+    createCustomChar(1, E);  // Create custom character E at location 1
+    createCustomChar(2, L);  // Create custom character L at location 2
+    createCustomChar(3, O);  // Create custom character O at location 3
+    
+    cmd(0x80);  // Move to the first line
+    data(0x00); // Display the custom character H
+    data(0x01); // Display the custom character E
+    data(0x02); // Display the custom character L
+    data(0x02); // Display the custom character L again
+    data(0x03); // Display the custom character O
+    
+    while(1); // Infinite loop to keep the display on
+    return;
+}
+
+void cmd(unsigned char a) {
+    RC0 = 0; // RS = 0 for command
+    RC1 = 0; // RW = 0 for write
+    PORTD = a; // Send command
+    RC2 = 1; // Enable pulse
+    for(int i = 0; i <= 100; i++); // Small delay
+    RC2 = 0;
+    for(int i = 0; i <= 5000; i++); // Larger delay
+}
+
+void data(unsigned char a) {
+    RC0 = 1; // RS = 1 for data
+    RC1 = 0; // RW = 0 for write
+    PORTD = a; // Send data
+    RC2 = 1; // Enable pulse
+    for(int i = 0; i <= 100; i++); // Small delay
+    RC2 = 0;
+    for(int i = 0; i <= 5000; i++); // Larger delay
+}
+
+void display(const char *p) {
+    while(*p) {
+        data(*p); // Display each character
+        p++;
+    }
+}
+
+void createCustomChar(unsigned char location, unsigned char *pattern) {
+    if (location < 8) { // Only 8 custom characters are allowed in CGRAM
+        cmd(0x40 + (location * 8)); // Set CGRAM address
+        for(int i = 0; i < 8; i++) {
+            data(pattern[i]); // Write each row of the custom character to CGRAM
+        }
+    }
+}

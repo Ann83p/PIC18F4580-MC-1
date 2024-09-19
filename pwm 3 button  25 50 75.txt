@@ -1,0 +1,35 @@
+#include <xc.h>
+void delay(void);
+void main(void) {
+    TRISC=0X51;//INPUT
+   //TRISC=0X00;
+   T2CON=0X06;//post scale ivide venda
+   PR2=255;
+     while(1)
+     {
+         if(RC0==1)//25%
+         {
+         CCP1CON=0X0C;
+   CCPR1L=0X40;
+   delay();
+     }
+         if(RC4==1)//50%
+         {
+           CCP1CON=0X0C;
+   CCPR1L=0X80;  
+   delay();
+         }
+         if(RC6==1)
+         {
+             CCP1CON=0X0C;
+   CCPR1L=0XC0;
+   delay();
+         }
+    return;
+     }}
+void delay(void)
+{
+    while(TMR2IF==0);
+    TMR2IF=0;
+    PR2=255;
+}

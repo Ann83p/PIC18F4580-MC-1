@@ -1,0 +1,30 @@
+#include <xc.h>
+#define fosc 20000000// no need of semi colon
+#define pre 8//pre scaler
+#define max 65536
+#define del .1//delay
+#define a max-((int)(fosc *del)/(4*pre))//eqn pre defined value
+void delay(void);
+void main(void) {
+
+    TRISC=0X00;
+    T1CON=0X31;//TIMER CONFIGURE
+    TMR1=a; 
+     while(1)
+    {
+            PORTC=0XFF;
+            delay();
+            PORTC=0X00;
+            delay();
+    }
+    return;
+}
+void delay(void)
+{
+   
+    while(TMR1IF==0);//FLAG 1 AANONN CHECK CHEYYAAN(OVERFLOW AAYONNN ARYAAN)
+    TMR1IF=0;//1 AAYAL 0 AAKAAN
+    TMR1=a;//INITIAL TIMER VALUE ITH VARY CHEYYAAM DELAY KURAYKKUNNA ANSARICH
+ 
+}
+ //eqn idumbo float varum athukond nammakk int aakkanm so type cast

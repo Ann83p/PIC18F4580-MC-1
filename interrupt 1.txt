@@ -1,0 +1,28 @@
+#include <xc.h>
+void main(void) {
+    TRISB=0X01;
+    TRISC=0X00;
+    TRISD=0X00;
+    ADCON1=0X0F;
+    INTCON=0XD0;//interrupt configure
+    while(1)
+    {
+            PORTC=0XFF;//on
+            for(unsigned int i=0;i<=62000;i++);
+            PORTC=0X00;//off
+            for(unsigned int i=0;i<=62000;i++);
+    }
+    return;
+}
+void __interrupt() ISR()
+{
+    if(INT0IF==1)//flag checking ,interrupt vannon aryaan
+    {
+        for(int j=1;j<=128;j=j*2)
+        {
+            PORTD=j;//shifting
+            for(unsigned int i=0;i<=62000;i++);
+        }
+   }
+    INT0IF=0;//interrupt flag clr cheyyaaan
+    }

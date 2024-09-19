@@ -1,0 +1,34 @@
+#include <xc.h>
+
+void main(void) {
+    TRISC=0X00;
+    TRISD=0X00;
+  unsigned char ar[10]={0X3F,0X06,0X5B,0X4F,0X66,0X6D,0X7D,0X07,0X7F,0X6F};
+    while(1)
+    {
+        for(unsigned char num=0;num<=10;num++)
+        {
+            PORTD=0X0E;
+            PORTC=ar[num];
+            for(long i=0;i<=50000;i++);
+            {
+                 PORTD=0X0D;
+            PORTC=ar[num];
+            for(long i=0;i<=50000;i++);
+            {
+                 PORTD=0X0B;
+            PORTC=ar[num];
+            for(long i=0;i<=50000;i++);
+            {
+                 PORTD=0X07;
+            PORTC=ar[num];
+            for(long i=0;i<=50000;i++);
+            }
+            }
+            }
+            
+        }
+        
+    }
+    return;
+}
